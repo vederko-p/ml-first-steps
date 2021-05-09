@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from stochastic_gradient import stochastic_grad, stochastic_average_grad
+from stochastic_gradient import stochastic_grad, stochastic_average_grad, momentum, nestr_grad
 from models import empirical_risk, regression_loss_function, linear_regression_model, loss_function_gradient
 
 
@@ -14,16 +14,22 @@ X, y = regr_val[:, 1].reshape(-1, 1), regr_val[:, 0].reshape(-1, 1)
 X = np.append(np.ones(X.shape[0]).reshape(-1, 1), X, axis=1)
 
 methods = [stochastic_grad,
-           stochastic_average_grad]
+           stochastic_average_grad,
+           momentum,
+           nestr_grad]
 names = ['Stochastic Gradient',
-         'Stochastic Average Gradient']
+         'Stochastic Average Gradient',
+         'Momentum',
+         "Nesterov's accelerated gradient"]
 params = [[0.0001, 0.5, 10**-10],
-          [0.00001, 0.5, 10**-10]]
+          [0.00001, 0.5, 10**-10],
+          [0.001, 0.5, 10**-10],
+          [0.001, 0.5, 10**-10]]
 
 
-fig, ax = plt.subplots(2, 1, figsize=(7, 7))
+fig, axs = plt.subplots(4)
 approx_x = np.append(np.ones(100).reshape(-1, 1), np.linspace(0, 30, 100).reshape(-1, 1), axis=1)
-for m,n,p,ax in zip(methods, names, params, ax):
+for m,n,p,ax in zip(methods, names, params, axs):
     weights = m(X, y, p[0], p[1], p[2],
                 empirical_risk, regression_loss_function,
                 linear_regression_model, loss_function_gradient)
@@ -32,11 +38,3 @@ for m,n,p,ax in zip(methods, names, params, ax):
     ax.plot(approx_x[:, 1], approx_y, c='r')
     ax.set_title(n)
 plt.show()
-
-
-'''
-weights = stochastic_average_grad(X, y, 0.0001, 0.5, 10**-10,
-                          empirical_risk, regression_loss_function,
-                          linear_regression_model, loss_function_gradient)
-print(weights)
-'''
