@@ -41,10 +41,13 @@ def classification_loss_function(a, x, w, y):  # Функция потерь (L)
     :param y: y^(i) in y - value in R
     :return: error value: [a(x, w) * y < 0] ~ logistic 0/1
     '''
+    '''
     if a(x, w) * y < 0:
         return 1
     else:
         return 0
+    '''
+    return np.log(1 + np.exp(-np.dot(w, x)*y))
 
 
 # ---| Эмпирический риск (Q) |---

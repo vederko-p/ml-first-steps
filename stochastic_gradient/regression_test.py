@@ -26,7 +26,6 @@ params = [[0.0001, 0.5, 10**-10],
           [0.001, 0.5, 10**-10],
           [0.001, 0.5, 10**-10]]
 
-
 fig, axs = plt.subplots(4)
 approx_x = np.append(np.ones(100).reshape(-1, 1), np.linspace(0, 30, 100).reshape(-1, 1), axis=1)
 for m,n,p,ax in zip(methods, names, params, axs):
