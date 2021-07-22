@@ -29,18 +29,20 @@ def a(uh, sigm, wmh):
 
 
 # ---| Выходные значения скрытого слоя сети на xi (u(xi)) |---
-def u(x, sigm, whj):
+def u(x, sigm, whj, one=0):
     '''
     :param x: Элемент обучающей выборки - numpy массив-столбец
     :param sigm: Сигмоидная функция
     :param wjh: Веса нейронов скрытого слоя - numpy array; (h x j), h - кол-во нейронов скрытого слоя
     :return: Возвращает выходные значения скрытого слоя сети на объекте xi (numpy массив-столбец из h элементов)
     '''
+    if one:
+        return np.append(sigm(whj.dot(x)), np.array([[-1]]), axis=0)
     return sigm(whj.dot(x))
 
 
 # ---| Функция потерь (L) |---
-def loss_function(whj, wmh, x, y):
+def loss_function(whj, wmh, x, y, one=0):
     '''
     :param wjh: Веса нейронов скрытого слоя - numpy array
     :param whm: Веса нейронов выходного слоя - numpy array
@@ -48,13 +50,13 @@ def loss_function(whj, wmh, x, y):
     :param y: Целевое значение соответствующего элемента обучающей выборки - numpy array
     :return: Взвращает значение ошибки на элементе обучающей выборки
     '''
-    uh = u(x, sigm, whj)
+    uh = u(x, sigm, whj, one)
     an = np.array(a(uh, sigm, wmh))
     return ((an - y)**2).sum() / 2
 
 
 # ---| Эмпирический риск (Q) |---
-def empirical_risk(L, whj, whm, X, Y):
+def empirical_risk(L, whj, wmh, X, Y, one=0):
     '''
     :param wjh: Веса нейронов скрытого слоя - numpy array
     :param whm: Веса нейронов выходного слоя - numpy array
@@ -62,7 +64,7 @@ def empirical_risk(L, whj, whm, X, Y):
     :param Y: Целевые значения обучающей выборки - numpy array
     :return: Значение эмпирического риска на обучающей выборке
     '''
-    return sum([L(whj, wmh, x, y) for x,y in zip(X,Y)]) / X.shape[0]
+    return sum([L(whj, wmh, x.reshape(-1, 1), y.reshape(-1, 1), one) for x,y in zip(X,Y)]) / X.shape[0]
 
 
 '''
@@ -71,6 +73,4 @@ whj = np.array([[0.7, -0.2], [-0.8, 0.4], [0.3, 0.6]])
 wmh = np.array([[0.4, -0.3, 0.8]])
 uh = u(x, sigm, whj)
 # print(a(uh, sigm, wmh))
-
-# print(loss_function(whj, wmh, x, [[1]]))
 '''
