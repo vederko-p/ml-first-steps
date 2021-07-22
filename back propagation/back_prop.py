@@ -27,7 +27,7 @@ def back_propagation(X0, Y, h, m, lam, eta, eps, Q, L, a, u, sigm, one=0):
     whj0 = np.ones(h*n).reshape(h, n)
     wmh0 = np.ones((h + one)*m).reshape(m, (h + one))
     q0 = Q(L, whj0, wmh0, X, Y, one)
-    k = 100000
+    k = 10000
     while k:  # True
         # Прямой ход
         i = np.random.randint(0, l)
@@ -42,7 +42,7 @@ def back_propagation(X0, Y, h, m, lam, eta, eps, Q, L, a, u, sigm, one=0):
             q0 = q1
             sdf_m = sd(sigm, wmh0.dot(ui))
             sdf_h = sd(sigm, whj0.dot(xi))
-            eih = wmh0[:, :-1].transpose().dot(eim * sdf_m)
+            eih = wmh0[:, :(-one or None)].transpose().dot(eim * sdf_m)
             # Градиентный шаг
             mesh_t, mesh_u = np.meshgrid(ui.flatten(), (eim*sdf_m).flatten())
             wmh0 -= mesh_t*mesh_u*eta
@@ -51,21 +51,3 @@ def back_propagation(X0, Y, h, m, lam, eta, eps, Q, L, a, u, sigm, one=0):
         else:
             break
     return whj0, wmh0
-
-
-def stochastic_grad(X, Y, h, lam, eps, Q, L, a, lg):
-    l, n = X.shape
-    w0 = np.ones(n)
-    q0 = (1/l * Q(L, a, X, w0, Y))
-    while True:
-        i = np.random.randint(0, l)
-        xi, yi = X[i], Y[i, 0]
-        ei = L(a, xi, w0, yi)
-        w1 = w0 - h * lg(L, a, xi, w0, yi)
-        q1 = lam*ei + (1-lam)*q0
-        if (w1 - w0).dot(w1 - w0) >= eps*(1 + w1.dot(w1)):
-            w0 = w1.copy()
-            q0 = q1
-        else:
-            break
-    return w1
