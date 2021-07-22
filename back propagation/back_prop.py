@@ -50,4 +50,5 @@ def back_propagation(X0, Y, h, m, lam, eta, eps, Q, L, a, u, sigm, one=0):
             whj0 -= mesh_t*mesh_u*eta
         else:
             break
+    print('--------------------------------------')
     return whj0, wmh0
