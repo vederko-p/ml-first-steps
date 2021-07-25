@@ -45,8 +45,8 @@ weights = []
 for i in range(len(methods)):
     w = []
     for j in range(len(methods[0])):
-        print('Обучение методом ' + labels[i][j] + ' завершено')
         w.append(methods[i][j](*params[i][j]))
+        print('Обучение методом ' + labels[i][j] + ' завершено')
     weights.append(w)
 
 # Изображение
