@@ -430,7 +430,7 @@ def nadam(X0, Y, h, m, gamma, alpha, eps, lam, eta, acc, Q, L, a, u, sigm, one=0
             vs_wmh = v_wmh*((1-gamma**k)**-1)
             s_wmh = alpha*s_wmh + (1-alpha)*(lg**2)
             ss_wmh = s_wmh*((1-alpha**k)**-1)
-            wmh0 -= eta*vs_wmh / (ss_wmh**0.5 + eps)
+            wmh0 -= eta*(gamma*vs_wmh + ((1-gamma)/(1-gamma**k))*lg) / (ss_wmh**0.5 + eps)
             # Веса скрытого слоя
             mesh_t, mesh_u = np.meshgrid(xi.flatten(), (eih * sdf_h).flatten())
             lg = mesh_t * mesh_u
@@ -438,7 +438,7 @@ def nadam(X0, Y, h, m, gamma, alpha, eps, lam, eta, acc, Q, L, a, u, sigm, one=0
             vs_whj = v_whj*((1-gamma**k)**-1)
             s_whj = alpha*s_whj + (1-alpha)*(lg**2)
             ss_whj = s_whj*((1-alpha**k)**-1)
-            whj0 -= eta*vs_whj / (ss_whj**0.5 + eps)
+            whj0 -= eta*(gamma*vs_whj + ((1-gamma)/(1-gamma**k))*lg) / (ss_whj**0.5 + eps)
         else:
             break
         k += 1
