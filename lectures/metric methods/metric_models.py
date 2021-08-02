@@ -39,17 +39,19 @@ def nadaray_watson(x, X, y, K, h):
 
 
 def lowess(X, y, K, Ks, h, eps):
-    gammas = np.ones
+    l = X.shape[0]
+    gammas = np.ones(l)
     a = np.array([])
-    while True:  # сходимость гамма
-        for i in range(X.shape[0]):
+    while True:
+        for i in range(l):
             t = gammas * K(euclidean_distance(X[i], X) / h)
-            s1 = (y*t).sum - y[i]*t[i]
+            s1 = (y*t).sum() - y[i]*t[i]
             s2 = t.sum() - t[i]
             a = np.hstack([a, s1/s2])
         gammas_n = Ks(np.abs(a - y))
         if (gammas_n - gammas).dot(gammas_n - gammas) >= eps * (1 + gammas_n.dot(gammas_n)):
             gammas = gammas_n.copy()
+            a = np.array([])
         else:
             break
     return gammas
