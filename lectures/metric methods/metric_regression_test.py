@@ -1,8 +1,8 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from metric_models import nadaray_watson, lowess, nadaray_watson_lowess
-from metric_models import gauss_core, quadr_core
+from metric_regression_models import nadaray_watson, lowess, nadaray_watson_lowess
+from metric_regression_models import gauss_core, quadr_core
 
 
 # Выборка
