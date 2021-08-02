@@ -55,3 +55,19 @@ def lowess(X, y, K, Ks, h, eps):
         else:
             break
     return gammas
+
+
+def nadaray_watson_lowess(x, X, y, K, h, gammas):
+    '''
+    :param x: one single digit
+    :param X: numpy array
+    :param y: numpy array
+    :param K: core
+    :param h: window size
+    :param gammas: corrected weights
+    :return: a(h, x) due to Nadaray-Watson
+    '''
+    t = gammas * K(euclidean_distance(x, X) / h)
+    s1 = (y * t).sum()
+    s2 = t.sum()
+    return s1 / s2
