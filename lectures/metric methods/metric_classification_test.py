@@ -1,7 +1,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from metric_classification_models import kNN
+from metric_classification_models import kNN, weighted_kNN
 
 
 # Выборки
@@ -22,11 +22,18 @@ X2_test = np.array([[0, 0]]) + 0.5*np.random.randn(13, n)
 X_test = np.vstack([X1_test, X2_test])
 
 # Обучение и классификация
+'''
 # kNN
 y_test = np.array([])
 for x in X_test:
-    y_test = np.hstack([y_test, kNN(x, X, y, 10)])
+    y_test = np.hstack([y_test, kNN(x, X, y, 15)])
+'''
 
+
+# Weighted kNN
+y_test = np.array([])
+for x in X_test:
+    y_test = np.hstack([y_test, weighted_kNN(x, X, y, 10, 0.5)])
 
 # Визуализация
 cols = [None, 'red']
@@ -40,3 +47,9 @@ for x,y in zip(X_test, y_test):
                 color=cols[int(y)], edgecolors='black', s=100)
 plt.legend(loc='best')
 plt.show()
+
+
+'''
+x = np.array([0.46, 0.28])
+print(weighted_kNN(x, X, y, 10, 0.99))
+'''
