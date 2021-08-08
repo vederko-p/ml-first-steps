@@ -1,10 +1,14 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from metric_classification_models import kNN, weighted_kNN
+from matplotlib import gridspec
+
+from metric_classification_models import gauss_core
+from metric_classification_models import kNN, weighted_kNN, \
+                                         parzen_window_consth, parzen_window_variateh
 
 
-# Выборки
+# ---| Выборка |---
 # Обучающая:
 np.random.seed(0)
 l = 100
@@ -21,35 +25,32 @@ X1_test = np.array([[0, 0]]) + 0.5*np.random.randn(13, n)
 X2_test = np.array([[0, 0]]) + 0.5*np.random.randn(13, n)
 X_test = np.vstack([X1_test, X2_test])
 
-# Обучение и классификация
-'''
-# kNN
-y_test = np.array([])
-for x in X_test:
-    y_test = np.hstack([y_test, kNN(x, X, y, 15)])
-'''
 
+# ---| Визуализация |---
+methods = [kNN, weighted_kNN, parzen_window_consth, parzen_window_variateh]
+arguments = [(X, y, 15), (X, y, 10, 0.5), (X, y, gauss_core, 1.2), (X, y, gauss_core, 7)]
+titles = ['Метод k ближайших соседей',
+          'Взвешенный метод k ближайших соседей',
+          'Метод Парзеновского окна постоянной ширины',
+          'Метод Парзеновского окна переменной ширины']
+cols_test = [None, 'red']
+cols_res = ['blue', 'pink']
 
-# Weighted kNN
-y_test = np.array([])
-for x in X_test:
-    y_test = np.hstack([y_test, weighted_kNN(x, X, y, 10, 0.5)])
-
-# Визуализация
-cols = [None, 'red']
-for k in np.unique(y):
-    plt.plot(X[y == k, 0], X[y == k, 1],
-             'o', label='Класс {}'.format(k), color=cols[k])
-
-cols = ['blue', 'pink']
-for x,y in zip(X_test, y_test):
-    plt.scatter(x[0], x[1],
-                color=cols[int(y)], edgecolors='black', s=100)
-plt.legend(loc='best')
+fig, gs = plt.figure(), gridspec.GridSpec(2, 2)
+ax = []
+for i,method in enumerate(methods):
+    ax.append(fig.add_subplot(gs[i]))
+    # Тестовая выборка
+    for k in np.unique(y):
+        ax[i].plot(X[y == k, 0], X[y == k, 1],
+                   'o', label='Класс {}'.format(k), color=cols_test[int(k)])
+    # Результат классификации
+    y_test = np.array([])
+    for x in X_test:
+        y_test = np.hstack([y_test, method(x, *arguments[i])])
+    for xi, yi in zip(X_test, y_test):
+        ax[i].scatter(xi[0], xi[1],
+                    color=cols_res[int(yi)], edgecolors='black', s=100)
+    ax[i].set_title(titles[i])
+    ax[i].legend(loc='best')
 plt.show()
-
-
-'''
-x = np.array([0.46, 0.28])
-print(weighted_kNN(x, X, y, 10, 0.99))
-'''
