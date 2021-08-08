@@ -37,5 +37,16 @@ def weighted_kNN(x, X, Y, k, q):
     a = np.meshgrid(np.unique(Y), w)[0] == Y.reshape(-1, 1)
     # sum([y(i) = y] w(i, x)):
     s = (a*w.reshape(-1, 1)).sum(axis=0)
-    # return s
+    return np.argmax(s)
+
+
+# ---| Parzen Window with constant h |---
+def parzen_window_consth(x, X, Y, K, h):
+    # w(i, x):
+    r = cdist(x.reshape(-1, 2), X)[0]  # distances from x to X^l
+    w = K(r/h)
+    # [y(i) = y]:
+    a = np.meshgrid(np.unique(Y), w)[0] == Y.reshape(-1, 1)
+    # sum([y(i) = y] w(i, x)):
+    s = (a * w.reshape(-1, 1)).sum(axis=0)
     return np.argmax(s)
