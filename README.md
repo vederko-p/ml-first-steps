@@ -7,18 +7,29 @@
 * Основные понятия и примеры прикладных задач
 * Линейный классификатор и стохастический градиент
 * Нейронные сети: градиентные методы оптимизации  
+* Метрические методы классификации и регрессии
 
 **Реализованные алгоритмы:**
 * Стохастический градиент:  
     * Стохастический градиент (Stochastic Gradient);  
     * Stochastic Average Gradient;
     * Momentum;  
-    * Nesterov's accelerated gradient.  
+    * Nesterov's accelerated gradient.
+
+
 * Метод обратного распространения ошибки:
     * Back Propagation;
     * SAGProp (Stochastic Average Gradient);
     * RMSProp (Running Mean Square);
     * AdaDelta (Adaptive Learning Rate);
     * Adam (Adaptive Momentum);
-    * Nadam (Nesterov-accelerated adaptive momentum).  
+    * Nadam (Nesterov-accelerated adaptive momentum).
 
+
+* Метрические методы классификации и регрессии
+    * Метод k ближайших соседей;
+    * Метод k взвешенных ближайших соседей;
+    * Метод окна Парзена фиксированной ширины;
+    * Метод окна Парзена переменной ширины;
+    * Формула ядерного сглаживания Надарая-Ватсона;
+    * Формула Н-В + LOWESS (LOcally WEighted Scatter plot Smoothing).
